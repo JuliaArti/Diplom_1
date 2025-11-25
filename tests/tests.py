@@ -1,6 +1,7 @@
 import pytest
 from ingredient_types import INGREDIENT_TYPE_FILLING, INGREDIENT_TYPE_SAUCE
 from burger import Burger
+from data import *
 
 class TestBurger:
     # Тесты для класса Burger с использованием моков и параметризации
@@ -11,14 +12,7 @@ class TestBurger:
         burger.set_buns(mock_bun)
         assert burger.bun == mock_bun
 
-    @pytest.mark.parametrize("ingredient_type,name,price", [ 
-           (INGREDIENT_TYPE_FILLING, "cutlet", 100),
-           (INGREDIENT_TYPE_FILLING, "dinosaur", 200),
-           (INGREDIENT_TYPE_FILLING, "sausage", 300),
-           (INGREDIENT_TYPE_SAUCE, "hot sauce", 100),
-           (INGREDIENT_TYPE_SAUCE, "sour cream", 200),
-           (INGREDIENT_TYPE_SAUCE, "chili sauce", 300),
-    ])    
+    @pytest.mark.parametrize("ingredient_type,name,price", test_add_ingredient_cases)
     def test_add_ingredient(self, ingredient_mock_factory, ingredient_type, name, price):
         burger = Burger()
         ingredient = ingredient_mock_factory(price, name, ingredient_type)
@@ -48,11 +42,7 @@ class TestBurger:
         assert burger.ingredients[6] == mock_ingredient_sauce
         assert burger.ingredients[7] == mock_ingredient_filling
 
-    @pytest.mark.parametrize("bun_price, ingr_prices, expected_price", [
-        (5.0, [2.0, 3.0], 15.0),  # 2 булки + 2 ингредиента
-        (3.0, [], 6.0),           # Только булки
-        (4.0, [1.5], 9.5),        # Булки + 1 ингредиент
-    ])
+    @pytest.mark.parametrize("bun_price, ingr_prices, expected_price", test_get_price_cases)
     def test_get_price(self, ingredient_mock_factory, mock_bun, bun_price, ingr_prices, expected_price):
         mock_bun.get_price.return_value = bun_price
         burger = Burger()
@@ -65,29 +55,7 @@ class TestBurger:
         
         assert burger.get_price() == expected_price
 
-    @pytest.mark.parametrize("bun_name, bun_price, ingredients, expected_receipt", [
-        (
-            "white bun",
-            3.0,
-            [
-                (INGREDIENT_TYPE_FILLING, "cheese", 4.0),
-                (INGREDIENT_TYPE_SAUCE, "ketchup", 5.0)
-            ],
-            '(==== white bun ====)\n'
-            '= filling cheese =\n'
-            '= sauce ketchup =\n'
-            '(==== white bun ====)\n\n'
-            'Price: 15.0'
-        ),
-        (
-            "dark bun",
-            3.0,
-            [],
-            '(==== dark bun ====)\n'
-            '(==== dark bun ====)\n\n'
-            'Price: 6.0'
-        )
-    ])
+    @pytest.mark.parametrize("bun_name, bun_price, ingredients, expected_receipt", test_get_receipt_cases)
     def test_get_receipt(self, ingredient_mock_factory, mock_bun, bun_name, bun_price, ingredients, expected_receipt):
         mock_bun.get_name.return_value = bun_name
         mock_bun.get_price.return_value = bun_price
