@@ -1,0 +1,11 @@
+Ссылки на GitHub
+
+Задание 1: [https://github.com/JuliaArti/Diplom_1/pull/1]
+
+Задание 2: [https://github.com/JuliaArti/Diplom_2/pull/1]
+
+Задание 3: [https://github.com/JuliaArti/Diplom_3/pull/1]
+
+Комментарий для ревьюера
+
+Здесь можно написать пояснения к своей работе
